@@ -1,0 +1,14 @@
+/log/*
+/temp/*
+/vendor
+/node_modules
+/www/build
+/www/favicon.ico
+*.actual
+*.expected
+*.log
+/composer.lock
+!.gitignore
+!.htaccess
+!web.config
+/app/config/config.local.neon

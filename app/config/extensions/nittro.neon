@@ -1,0 +1,3 @@
+latte:
+    macros:
+        - Nittro\Bridges\NittroLatte\NittroMacros

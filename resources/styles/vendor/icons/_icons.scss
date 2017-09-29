@@ -1,0 +1,11 @@
+// This is placeholder file for SASS function that embeds SVG into CSS.
+// DON'T @import IT!
+// Will be replaced with compiled _icons.scss.tmpl
+// It serves for IDEs to not report missing function.
+// sass-lint:disable-all
+
+// Get inline SVG, eg. url("data:image/svg+xml;base64,...")
+// Usage: svg-icon-inline(alert, red, blue)
+@function svg-icon-inline($name, $fill:"", $stroke:"") {
+  // ...
+}

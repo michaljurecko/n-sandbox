@@ -1,0 +1,10 @@
+menu:
+  front:
+    translator: true
+    templates:
+        menu: %appDir%/modules/Front/templates/components/menu.latte
+    items:
+      menu.home:
+        action: Homepage:default
+      menu.html5:
+        action: Homepage:html5

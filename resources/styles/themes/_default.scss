@@ -1,0 +1,156 @@
+// -----------------------------------------------------------------------------
+// This file contains everything related to the default theme.
+// -----------------------------------------------------------------------------
+// sass-lint:disable force-element-nesting
+
+$theme1-color: #ddd;
+$theme2-color: darken($theme1-color, 10%);
+
+// Colors
+.header-container {
+  border-bottom: 20px solid $theme2-color;
+}
+
+.footer-container,
+.main aside {
+  border-top: 20px solid $theme2-color;
+}
+
+.header-container,
+.footer-container,
+.main aside {
+  background: $theme1-color;
+}
+
+// Wrapper
+.wrapper {
+  @extend %clearfix;
+  width: 90%;
+  margin: 0 5%;
+
+  @include respond-to("desktop-up") {
+    width: 1026px;
+    margin: 0 auto;
+  }
+}
+
+article,
+aside,
+section {
+  @extend %clearfix;
+}
+
+// Main
+.main {
+  padding: 30px 0;
+
+  article {
+    h1 {
+      font-size: 2em;
+    }
+  }
+
+  aside {
+    color: black;
+    padding: 0 5% 10px;
+  }
+
+  @include respond-to("tablet-landscape-up") {
+    article {
+      float: left;
+      width: 57%;
+    }
+
+    aside {
+      float: right;
+      width: 28%;
+      box-sizing: content-box;
+    }
+  }
+}
+
+// Title
+.title  {
+  color: black;
+
+  @include respond-to("tablet-landscape-up") {
+    float: left;
+    margin: 10px 0 0;
+  }
+}
+
+
+// Footer
+.footer-container footer {
+  color: black;
+  padding-bottom: 20px;
+}
+
+// Css effects
+@include respond-to("tablet-landscape-up") {
+  .header-container,
+  .main aside {
+    box-shadow: 0 2px 5px #888;
+  }
+}
+
+// Navigation
+nav {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  a {
+    display: block;
+    margin-bottom: 10px;
+    padding: 15px 0;
+
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+
+    background: $theme2-color;
+
+    &,
+    &:hover,
+    &:visited {
+      color: black;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &.active {
+      background: mix($theme2-color, $brand-color, 60%);
+    }
+  }
+
+  @include respond-to("tablet-portrait-up") {
+    a {
+      float: left;
+      width: 48%;
+      padding: 25px 2%;
+      margin: 0 1.7%;
+    }
+
+    li:first-child a {
+      margin-left: 0;
+    }
+
+    li:last-child a {
+      margin-right: 0;
+    }
+
+    ul li {
+      display: inline;
+    }
+  }
+
+  @include respond-to("tablet-landscape-up") {
+    float: right;
+    width: 38%;
+  }
+}

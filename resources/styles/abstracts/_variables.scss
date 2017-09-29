@@ -1,0 +1,40 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+// Regular font family
+$text-font-stack: "Open Sans", "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", sans-serif !default;
+
+// Code (monospace) font family
+$code-font-stack: "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Monaco", monospace !default;
+
+
+// Copy text color
+$text-color: rgb(34, 34, 34) !default;
+
+// Main brand color
+$background-color: white !default;
+
+// Main brand color
+$brand-color: rgb(60, 142, 215) !default;
+
+// Selection color
+$selection-color: mix($brand-color, white, 20%) !default;
+
+
+// Flash messages
+$flash-message-font-size: 0.8em  !default;
+$flash-message-font-weight: 600;
+$flash-message-height: 3em  !default;
+$flash-message-line-height: 1.5em  !default;
+$flash-message-side-padding: 1.5em  !default;
+$flash-message-text-color: white !default;
+$flash-message-background: #738e99 !default;
+$flash-message-icon-size: 1.7em;
+$flash-message-icon-color: #fff  !default;
+$flash-message-types: (
+  "info": (color: #2993cc, icon: "information-outline"),
+  "success": (color: #3dcc85, icon: "check"),
+  "warning": (color: #ebb852, icon: "alert-outline"),
+  "error": (color: #e64545, icon: "alert-circle-outline"),
+)  !default;

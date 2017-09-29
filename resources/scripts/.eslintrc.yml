@@ -1,0 +1,12 @@
+env:
+  browser: true
+  es6: true
+
+extends:
+  - airbnb-base # https://github.com/airbnb/javascript
+
+rules:
+  func-names: off
+  prefer-destructuring: off
+  max-len: warn
+  no-unused-vars: [warn, {vars: all, args: none}]

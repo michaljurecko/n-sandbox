@@ -1,0 +1,83 @@
+// -----------------------------------------------------------------------------
+// This file contains styles for Nittro framework
+// -----------------------------------------------------------------------------
+// Full and original styles: node_modules/nittro-page/src/css/transitions.less
+
+// Slide transition
+.nittro-transition-slide {
+  transform-origin: center top;
+
+  &.nittro-transition-active {
+    transition: opacity 0.25s, transform 0.25s;
+  }
+
+  &.nittro-transition-out {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  &.nittro-transition-middle {
+    transition: none;
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  &.nittro-transition-in {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Transition bar
+.nittro-transition-bar {
+  &::before {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 2px;
+    background: $brand-color;
+    transform-origin: left center;
+    transform: scaleX(0);
+    opacity: 0;
+    content: "";
+  }
+
+  &.nittro-transition-out {
+    transition-duration: 0.4s;
+
+    &::before {
+      transition: transform 0.4s ease-in, opacity 0.1s ease-out 0.1s;
+      transform: scaleX(0.4);
+      opacity: 1;
+    }
+  }
+
+  &.nittro-transition-middle {
+    &::before {
+      transition: transform 4s linear;
+      transform: scaleX(0.9);
+      opacity: 1;
+    }
+  }
+
+  &.nittro-transition-in {
+    transition-duration: 0.5s;
+
+    &::before {
+      transition: transform 0.4s ease, opacity 0.2s ease-out 0.3s;
+      transform: scaleX(1);
+      opacity: 0;
+    }
+  }
+}
+
+body {
+  .nittro-transition-bar {
+    position: relative;
+
+    &::before {
+      position: fixed;
+    }
+  }
+}

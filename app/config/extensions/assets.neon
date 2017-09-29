@@ -1,0 +1,2 @@
+extensions:
+    assetMacro: Webrouse\AssetMacro\DI\Extension

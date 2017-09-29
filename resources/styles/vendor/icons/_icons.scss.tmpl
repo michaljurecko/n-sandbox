@@ -1,0 +1,39 @@
+// This is template file for SASS function that embeds SVG into CSS.
+// Template language: Mustache
+// DON'T @import IT!
+
+// Get inline SVG, eg. url("data:image/svg+xml;base64,...")
+// Usage: svg-icon-inline(alert, red, blue)
+@function svg-icon-inline($name, $fill:"", $stroke:"") {
+  $svg: "";
+
+
+  {{#icons}}
+  @if $name == {{name}} {
+    $svg: "{{&svg}}";
+  }
+  {{/icons}}
+
+  // Warn if icon isn't defined
+  @if $svg == "" {
+    @warn "Icon '#{$name}' not found.";
+  }
+
+  // Set SVG fill color
+  @if $fill != "" {
+    $svg: svgFill($svg, inspect($fill));
+  }
+
+  // Set SVG stroke color
+  @if $stroke != "" {
+    $svg: svgStroke($svg, inspect($stroke));
+  }
+
+  $uri: encodeDataURI($svg);
+  @return url("data:image/svg+xml,#{$uri}");
+
+  // Optionally: you can use base64 encoding
+  // BUT, plain SVG has benefits if an icon is used multiple times and GZIP is used
+  // $base64: encodeBase64('{{&svg}}');
+  // @return url("data:image/svg+xml;base64,#{$base64}");
+}

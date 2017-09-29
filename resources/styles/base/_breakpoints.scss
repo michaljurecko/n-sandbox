@@ -1,0 +1,42 @@
+// -----------------------------------------------------------------------------
+// This file contains breakpoints definitions (using breakpoint-sass).
+// -----------------------------------------------------------------------------
+
+// Boundaries
+$phone-upper: 600px;
+$tablet-portrait-upper: 900px;
+$tablet-landscape-upper: 1200px;
+$desktop-upper: 1800px;
+
+// It is recommended to use "mobile-first" approach.
+// In that case, design everything for mobile screen and then use only "*-up" breakpoints.
+@include add-breakpoint("phone-only", screen (max-width ($phone-upper - 1px)));
+@include add-breakpoint("tablet-portrait-up", screen (min-width $phone-upper));
+@include add-breakpoint("tablet-portrait-only", screen (min-width $phone-upper) (max-width ($tablet-portrait-upper - 1px)));
+@include add-breakpoint("tablet-landscape-up", screen (min-width $tablet-portrait-upper));
+@include add-breakpoint("tablet-landscape-only", screen (min-width $tablet-portrait-upper) (max-width ($tablet-landscape-upper - 1px)));
+@include add-breakpoint("desktop-up", screen (min-width $tablet-landscape-upper));
+@include add-breakpoint("desktop-only", screen (min-width $tablet-landscape-upper) (max-width ($desktop-upper - 1px)));
+@include add-breakpoint("big-desktop-up", screen (min-width $desktop-upper));
+
+// EXAMPLE:
+//
+//  .foo {
+//    // ... mobile and up styles
+//
+//    @include respond-to("tablet-portrait-up") {
+//      // ... tablet portrait and up styles
+//    }
+//
+//    @include respond-to("tablet-landscape-up") {
+//      // ... tablet landscape and up styles
+//    }
+//
+//    @include respond-to("desktop-up") {
+//      // ... desktop and up styles
+//    }
+//
+//    @include respond-to("big-desktop-up") {
+//      // ... big desktop and up styles
+//    }
+//  }

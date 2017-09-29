@@ -1,0 +1,3 @@
+error:
+    connection: Pri pripojení k serveru sa vyskytla chyba. Skontrolujte pripojenie k internetu a skúste to znova.
+    unknown: Pri spracovaní žiadosti sa vyskytla chyba. Skúste to neskôr prosím.

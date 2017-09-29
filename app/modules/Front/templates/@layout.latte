@@ -1,0 +1,54 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+<!DOCTYPE html>
+<html lang="{$locale}" class="no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>{ifset title}{include title|stripHtml|strip} | {/ifset}n-sandbox</title>
+
+	<meta name="author" content="sandbox">
+	<meta name="description" content="Extended nette/sandbox.">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link n:foreach="$availableLocales as $l" n:if="$locale != $l" rel=”alternate” hreflang=”{$l}” n:href="this, locale => $l">
+
+	<!-- Icons -->
+	<!--[if IE]><link rel="shortcut icon" href="{asset build/icons/favicon.ico}"><![endif]-->
+	<link rel="icon" type="image/png" href="{asset build/icons/favicon.png}">
+	<link rel="apple-touch-icon" href="{asset build/icons/apple.png}">
+
+	<!-- CSS & JS -->
+	<link rel="stylesheet" href="{asset build/css/app.css}">
+	<script src="{asset build/js/app.js}" defer></script>
+	<script src="{asset build/js/translations/$locale.js}" defer></script>
+</head>
+
+<body class="nittro-transition-auto nittro-transition-bar">
+	{* Flash messages *}
+	<ul n:flashes></ul>
+
+	<div class="header-container">
+		<header class="wrapper">
+			<h1 class="title">h1.title</h1>
+			<nav n:snippet="navigation">
+				{control frontMenu|indent:4|trim}
+			</nav>
+		</header>
+	</div>
+
+	<div class="main-container">
+		<div class="main wrapper nittro-transition-auto nittro-transition-slide" n:snippet="content">
+            {include content|indent:3|trim}
+		</div>
+	</div>
+
+	<div class="footer-container">
+		<footer class="wrapper">
+			<h3>footer</h3>
+		</footer>
+	</div>
+</body>
+</html>

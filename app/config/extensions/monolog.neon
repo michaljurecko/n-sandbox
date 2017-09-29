@@ -1,0 +1,6 @@
+extensions:
+	monolog: Kdyby\Monolog\DI\MonologExtension
+
+monolog:
+	name: n-sandbox
+	registerFallback: %debugMode%

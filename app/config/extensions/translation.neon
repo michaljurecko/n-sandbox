@@ -1,0 +1,13 @@
+extensions:
+    translation: Kdyby\Translation\DI\TranslationExtension
+
+translation:
+    dirs:
+        - %appDir%/../resources/translations
+    default: en
+    whitelist: [en, cs, sk]
+    fallback: [en]
+    resolvers:
+        request: on
+        session: off
+        header: off

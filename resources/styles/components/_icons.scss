@@ -1,0 +1,25 @@
+.icon {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  shape-rendering: geometricPrecision;
+}
+
+.icon-blue {
+  fill: #0b9eff;
+}
+
+.icon-green {
+  fill: #a5de2e;
+  stroke: #5c8a20;
+  stroke-width: 1px;
+}
+
+.icon-orange {
+  fill: #ffa700;
+}
+
+.icon-red {
+  fill: #de0d00;
+  fill-opacity: 0.2;
+}

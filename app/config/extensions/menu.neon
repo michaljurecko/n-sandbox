@@ -1,0 +1,2 @@
+extensions:
+    menu: Carrooi\Menu\DI\MenuExtension

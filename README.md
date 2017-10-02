@@ -84,7 +84,7 @@ gulp
  * [Cssnano](https://www.npmjs.com/package/cssnano) compresses css in production mode
  * [Source maps](https://github.com/webrouse/n-sandbox/wiki/Source-Maps)
  * [Browsersync](https://www.browsersync.io) for synchronised development and testing in multiple browsers and devices 
- * [ECS](https://packagist.org/packages/symplify/easy-coding-standard) checkes [nette/coding-standard](https://github.com/nette/coding-standard) in PHP files
+ * [ECS](https://packagist.org/packages/symplify/easy-coding-standard) checks [nette/coding-standard](https://github.com/nette/coding-standard) in PHP files
  * Localization with [server-side](https://componette.com/kdyby/translation) and [client-side](https://github.com/willdurand/BazingaJsTranslationBundle/blob/master/Resources/doc/index.md) support, only used messages are extracted to JavaScript locales
  * [Menu component extension](https://github.com/Carrooi/Nette-Menu)
  * [Monolog extension](https://github.com/Kdyby/Monolog) for simple logging to various targets

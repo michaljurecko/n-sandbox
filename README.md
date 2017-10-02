@@ -5,7 +5,7 @@
 
 This is an extended version of [nette/sandbox](https://github.com/nette/sandbox) focused on fast development with modern PHP and JS tools.
 
-[Wiki](https://github.com/webrouse/n-sandbox/wiki) provides guide how to use present technologies with Nette Framework.
+**[Wiki explains](https://github.com/webrouse/n-sandbox/wiki) how to use present technologies with Nette Framework.**
 
 This sandbox is currently based on `Nette 2.4` due to incompatibility of some extensions with `Nette 3`.
 

@@ -26,7 +26,7 @@ class RouterFactory
 				'locale' => [
 					// default locale, eg. "cs"
 					Route::VALUE => $translator->getDefaultLocale(),
-					// pattern from on available locales, eg. "cs|sk|en"
+					// pattern from available locales, eg. "cs|sk|en"
 					Route::PATTERN => implode('|', $translator->getAvailableLocales()),
 				],
 			]

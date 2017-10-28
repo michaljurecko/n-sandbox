@@ -1,2 +1,2 @@
 includes:
-    - vendor/nette/coding-standard/coding-standard-php71.neon
+	- vendor/nette/coding-standard/coding-standard-php71.neon

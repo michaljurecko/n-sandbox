@@ -158,7 +158,11 @@ const config = {
   phpIni: 'php.ini',
   phpListen: '127.0.0.1:8000',
   phpGlobs: ['app/**/*.php', 'tests/**/*.php'],
-  phpCodingStandards: 'coding-standard.neon',
+
+  // PHP coding standards
+  phpDirsForCheck: ['app', 'tests'],
+  phpstan: 'phpstan.neon',
+  phpecs: 'coding-standard.neon',
 
   // Browsersync
   browsersyncPort: 3000,
@@ -291,23 +295,47 @@ gulp.task('lint-scripts', () =>
 // ------------------------------------------------------------------------------------------
 // TASK: lint php
 // ------------------------------------------------------------------------------------------
-gulp.task('lint-php', (cb) => {
-  util.log('Running PHP coding standard check');
+gulp.task('lint-php', cb => runSequence('ecs', 'phpstan', cb));
+
+gulp.task('ecs', (cb) => {
+  util.log('Running PHP easy coding standard check');
 
   const args = [
     '-n', '-c', config.phpIni,
     'vendor/bin/ecs', 'check',
-    'app', 'tests',
-    '--config', config.phpCodingStandards,
+    '--config', config.phpecs,
   ];
+
   if (config.fix) {
     args.push('--fix');
   }
 
+  args.push(...config.phpDirsForCheck);
+
   spawn(config.phpBin, args, { stdio: 'inherit' })
     .on('exit', (code) => {
       if (code !== 0) {
-        onError(new util.PluginError('lint-php', 'There are some errors in PHP files.'));
+        onError(new util.PluginError('ecs', 'There are some errors in PHP files.'));
+      }
+      cb();
+    });
+});
+
+gulp.task('phpstan', (cb) => {
+  util.log('Running PHP phpstan check');
+
+  const args = [
+    '-n', '-c', config.phpIni,
+    'vendor/bin/phpstan', 'analyse',
+    '--configuration', config.phpstan,
+  ];
+
+  args.push(...config.phpDirsForCheck);
+
+  spawn(config.phpBin, args, { stdio: 'inherit' })
+    .on('exit', (code) => {
+      if (code !== 0) {
+        onError(new util.PluginError('phpstan', 'There are some errors in PHP files.'));
       }
       cb();
     });

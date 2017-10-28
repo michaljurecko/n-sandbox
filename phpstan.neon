@@ -1,0 +1,8 @@
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan/conf/config.level6.neon
+
+parameters:
+	autoload_directories:
+		- app
+		- tests

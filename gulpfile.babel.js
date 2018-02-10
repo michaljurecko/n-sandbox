@@ -33,7 +33,6 @@ import * as esprima from 'esprima';
 import esprimaUtils from 'esprima-ast-utils';
 import neon from 'neon-js/src/neon';
 import semaphore from 'stream-semaphore';
-import runSequence from 'run-sequence';
 import { spawn } from 'child_process';
 import browsersync from 'browser-sync';
 import notifier from 'node-notifier';
@@ -43,7 +42,7 @@ import svgo from 'gulp-svgmin';
 import mustache from 'mustache';
 import toIco from 'to-ico';
 import { PassThrough } from 'stream';
-import lazypipe from 'lazypipe';
+import combiner from 'stream-combiner2';
 import through from 'through2';
 import merge from 'merge2';
 import flat from 'flat';
@@ -51,6 +50,8 @@ import path from 'path';
 import fs from 'fs';
 import del from 'del';
 import packageJson from './package.json';
+
+process.on('unhandledRejection', (e) => { throw e; });
 
 // ------------------------------------------------------------------------------------------
 // Configuration, see https://github.com/webrouse/n-sandbox/wiki/Gulp#configuration
@@ -102,7 +103,7 @@ const config = {
   // Styles
   //   Options:
   //    * compress: compress output (override global config.compressCss)
-  //    * autoprefixer: load output with Autoprefixer (default true)
+  //    * autoprefixer: process output with Autoprefixer (default true)
   //    * entrypoint: entrypoint for SASS compiler
   styles: {
     'css/app.css': {
@@ -170,16 +171,6 @@ const config = {
 
 // Browsersync watch paths
 config.browsersyncWatch = [`${config.publicDir}/**`, 'app/**/*.{php,neon,latte}', config.translationsGlobs];
-
-// ------------------------------------------------------------------------------------------
-// TASK: styles
-// ------------------------------------------------------------------------------------------
-gulp.task('styles', cb => runSequence('lint-styles', 'compile-styles', cb));
-
-// ------------------------------------------------------------------------------------------
-// TASK: scripts
-// ------------------------------------------------------------------------------------------
-gulp.task('scripts', cb => runSequence('lint-scripts', 'compile-scripts', cb));
 
 // ------------------------------------------------------------------------------------------
 // TASK: compile styles
@@ -295,8 +286,6 @@ gulp.task('lint-scripts', () =>
 // ------------------------------------------------------------------------------------------
 // TASK: lint php
 // ------------------------------------------------------------------------------------------
-gulp.task('lint-php', cb => runSequence('ecs', 'phpstan', cb));
-
 gulp.task('ecs', (cb) => {
   util.log('Running PHP easy coding standard check');
 
@@ -341,10 +330,22 @@ gulp.task('phpstan', (cb) => {
     });
 });
 
+gulp.task('lint-php', gulp.series('ecs', 'phpstan'));
+
+// ------------------------------------------------------------------------------------------
+// TASK: styles
+// ------------------------------------------------------------------------------------------
+gulp.task('styles', gulp.series('lint-styles', 'compile-styles'));
+
+// ------------------------------------------------------------------------------------------
+// TASK: scripts
+// ------------------------------------------------------------------------------------------
+gulp.task('scripts', gulp.series('lint-scripts', 'compile-scripts'));
+
 // ------------------------------------------------------------------------------------------
 // TASK: lint
 // ------------------------------------------------------------------------------------------
-gulp.task('lint', cb => runSequence('lint-php', ['lint-scripts', 'lint-styles'], cb));
+gulp.task('lint', gulp.series('lint-php', gulp.parallel('lint-scripts', 'lint-styles')));
 
 // ------------------------------------------------------------------------------------------
 // TASK: icon
@@ -412,12 +413,32 @@ gulp.task('test', (cb) => {
 });
 
 // ------------------------------------------------------------------------------------------
+// TASK: clean
+// ------------------------------------------------------------------------------------------
+gulp.task('clean', () => del([
+  '!**/.*', // ignore files starting with dot
+  'temp/**/*',
+  '!temp/sessions',
+  `${config.publicDir}/${config.buildDir}/**/*`,
+  `${config.publicDir}/favicon.ico`,
+]));
+
+// ------------------------------------------------------------------------------------------
+// TASK: default
+// ------------------------------------------------------------------------------------------
+gulp.task('default', gulp.series(
+  'clean',
+  'lint-php',
+  gulp.parallel('scripts', 'styles', 'favicon', 'icons'),
+));
+
+// ------------------------------------------------------------------------------------------
 // TASK: serve-php
 // ------------------------------------------------------------------------------------------
-gulp.task('serve-php', ['default'], (cb) => {
+gulp.task('serve-php', gulp.series('default', (cb) => {
   phpServer(cb);
   watch();
-});
+}));
 
 // Run PHP server
 function phpServer(cb) {
@@ -447,7 +468,7 @@ function phpServer(cb) {
 // ------------------------------------------------------------------------------------------
 // TASK: serve
 // ------------------------------------------------------------------------------------------
-gulp.task('serve', ['default'], (cb) => {
+gulp.task('serve', gulp.series('default', (cb) => {
   phpServer(cb);
 
   // Run browsersync and proxy PHP server
@@ -465,21 +486,21 @@ gulp.task('serve', ['default'], (cb) => {
   });
 
   watch();
-});
+}));
 
 // ------------------------------------------------------------------------------------------
 // TASK: watch
 // ------------------------------------------------------------------------------------------
-gulp.task('watch', ['default'], () => {
+gulp.task('watch', gulp.series('default', () => {
   watch();
-});
+}));
 
 function watch() {
-  gulp.watch(config.phpGlobs, ['lint-php']);
-  gulp.watch(config.sassGlobs, ['styles']);
-  gulp.watch(config.scriptsGlobs, ['scripts']);
-  gulp.watch(config.translationsGlobs, ['scripts']);
-  gulp.watch(config.faviconPath, ['favicon']);
+  gulp.watch(config.phpGlobs, gulp.series('lint-php'));
+  gulp.watch(config.sassGlobs, gulp.series('styles'));
+  gulp.watch(config.scriptsGlobs, gulp.series('scripts'));
+  gulp.watch(config.translationsGlobs, gulp.series('scripts'));
+  gulp.watch(config.faviconPath, gulp.series('favicon'));
 
   // Browsersync reload, timeout prevents repeated reloads in a short time
   let reloadTimeout = null;
@@ -494,32 +515,9 @@ function watch() {
 }
 
 // ------------------------------------------------------------------------------------------
-// TASK: clean
-// ------------------------------------------------------------------------------------------
-gulp.task('clean', () => del([
-  '!**/.*', // ignore files starting with dot
-  'temp/**/*',
-  '!temp/sessions',
-  `${config.publicDir}/${config.buildDir}/**/*`,
-  `${config.publicDir}/favicon.ico`,
-]));
-
-// ------------------------------------------------------------------------------------------
 // GIT HOOKS (defined in package.json)
 // ------------------------------------------------------------------------------------------
-gulp.task('pre-commit', cb => runSequence('lint', 'test', cb));
-
-// ------------------------------------------------------------------------------------------
-// TASK: default
-// ------------------------------------------------------------------------------------------
-gulp.task('default', (cb) => {
-  runSequence(
-    'clean',
-    'lint-php',
-    ['icons', 'scripts', 'styles', 'favicon'],
-    cb,
-  );
-});
+gulp.task('pre-commit', gulp.series('lint', 'test'));
 
 // -----------------------------------------------------------------------------
 // Notify
@@ -756,7 +754,7 @@ class LocalizationPlugin {
       .pipe(through.obj(load, generate))
       .pipe(config.compressJs ? uglify({ mangle: config.mangleJs }) : util.noop())
       .pipe(storeRev(config.translationsOutput))
-      .on('end', done);
+      .on('finish', done);
   }
 }
 
@@ -805,24 +803,21 @@ function rollupScript(entrypoint) {
 // Note: Optional '*' character in destination parameter is replaced by file basename.
 // ------------------------------------------------------------------------------------------
 function storeRev(destination) {
-  const factory = lazypipe()
-    .pipe(clone)
-    .pipe(rename, origin => `${config.buildDir}/${destination}`.replace('*', path.basename(origin)))
-    .pipe(rev)
-    .pipe(revFormat, { prefix: '.' })
-    .pipe(() => (config.sourcemaps ? sourcemaps.write('.') : util.noop()))
-    .pipe(gulp.dest, config.publicDir)
-    .pipe(size, { showFiles: true, showTotal: false });
+  const stream = combiner.obj(
+    clone(),
+    rename(origin => `${config.buildDir}/${destination}`.replace('*', path.basename(origin))),
+    rev(),
+    revFormat({ prefix: '.' }),
+    config.sourcemaps ? sourcemaps.write('.') : util.noop(),
+    gulp.dest(config.publicDir),
+    size({ showFiles: true, showTotal: false }),
+  );
 
-  const stream = factory();
-
-  // Update manifest (in background)
+  // Update manifest.json
+  const semaphoreKey = destination + Math.random().toString(36);
   stream
-    .pipe(semaphore.lockStream('manifest', destination))
-    .pipe(rev.manifest({
-      path: `${config.publicDir}/${config.buildDir}/${config.manifest}`,
-      merge: true,
-    }))
+    .pipe(semaphore.lockStream('manifest', semaphoreKey))
+    .pipe(rev.manifest(`${config.publicDir}/${config.buildDir}/${config.manifest}`, { merge: true }))
     .pipe(through.obj((file, enc, cb) => {
       // Delete old assets
       const newManifest = JSON.parse(file.contents.toString());
@@ -830,13 +825,13 @@ function storeRev(destination) {
       Object.keys(oldManifest).forEach((key) => {
         if (!newManifest[key] || newManifest[key] !== oldManifest[key]) {
           const target = `${config.publicDir}/${oldManifest[key]}`;
-          del.sync([target, `${target}.map`]);
+          del([target, `${target}.map`]);
         }
       });
       cb(null, file);
     }))
     .pipe(gulp.dest('.'))
-    .pipe(semaphore.unlockStream('manifest', destination));
+    .pipe(semaphore.unlockStream('manifest', semaphoreKey));
 
   return stream;
 }

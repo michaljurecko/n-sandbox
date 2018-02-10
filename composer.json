@@ -29,7 +29,7 @@
 	},
 	"require-dev": {
 		"nette/tester": "^2.0",
-		"nette/coding-standard": "^0.6",
-		"phpstan/phpstan-nette": "^0.8"
+		"nette/coding-standard": "^0.8",
+		"phpstan/phpstan-nette": "^0.9"
 	}
 }

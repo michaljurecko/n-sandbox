@@ -22,7 +22,6 @@ class UserManager implements Nette\Security\IAuthenticator
 		COLUMN_EMAIL = 'email',
 		COLUMN_ROLE = 'role';
 
-
 	/** @var Nette\Database\Context */
 	private $database;
 

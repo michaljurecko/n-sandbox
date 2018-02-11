@@ -10,3 +10,15 @@ rules:
   prefer-destructuring: off
   max-len: warn
   no-unused-vars: [warn, {vars: all, args: none}]
+  "import/no-extraneous-dependencies": [error, {
+    devDependencies: [
+      "gulpfile.babel.js",
+      "**/build/**/*.js",
+      "**/*.test.js",
+      "**/*.spec.js",
+  ]}]
+  "import/extensions": [error, always, {
+    js: never,
+    jsx: never,
+    mjs: never,
+  }]

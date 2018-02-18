@@ -20,7 +20,6 @@ class HomepagePresenter extends BasePresenter
 		$this->flashMessage('An error has occurred!', 'error');
 		$this->flashMessage('Custom message type.', 'x');
 
-		$this->postGet('this');
 		$this->sendPayload(); // or $this->redrawControl('...');
 	}
 }

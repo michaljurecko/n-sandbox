@@ -14,7 +14,7 @@ gulp.task('watch', () => {
 
   // Browsersync reload, timeout prevents repeated reloads in a short time
   let reloadTimeout = null;
-  gulp.watch([`${config.publicDir}/**/*`] + config.browsersync.watch).on('all', () => {
+  gulp.watch(config.browsersync.watch.concat([`${config.publicDir}/**/*`])).on('all', () => {
     clearTimeout(reloadTimeout);
     reloadTimeout = setTimeout(() => {
       browsersync.reload();

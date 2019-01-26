@@ -28,6 +28,7 @@ onLoad(() => _context.invoke((Nittro) => {
       routing: 'Nittro.Routing.Bridges.RoutingDI.RoutingExtension',
       flashes: 'Nittro.Flashes.Bridges.FlashesDI.FlashesExtension',
       page: 'Nittro.Page.Bridges.PageDI.PageExtension',
+      dropZone: 'Nittro.Extras.DropZone.Bridges.DropZoneDI.DropZoneExtension',
     },
     services: {
       application: Application,
@@ -37,6 +38,7 @@ onLoad(() => _context.invoke((Nittro) => {
 
   // Create container
   this.di = builder.createContainer();
+  this.di.addService('container', this.di);
   tweaks(this.di, _context);
 
   // Add existing services

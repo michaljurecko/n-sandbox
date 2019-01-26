@@ -62,6 +62,7 @@
     "core-js": "^2.5.3",
     "mdi-svg": "^2.1.19",
     "nittro": "^2.0.33",
+    "nittro-extras": "^2.0.26",
     "normalize.css": "^8.0.0"
   },
   "scripts": {

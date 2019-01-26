@@ -30,7 +30,7 @@ const nittroBuilder = new nittro.Builder({
     checklist: false,
     dialogs: false,
     confirm: false,
-    dropzone: false,
+    dropzone: true,
     paginator: false,
     keymap: false,
     storage: false,
